@@ -1,0 +1,50 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import "tailwindcss";
+
+@theme {
+  /* Color */
+  --color-main-primary: #3ecf4c;
+  --color-main-secondary: #ffbd3a;
+  --color-main-tertiary: #f64920;
+  --color-main-quaternary: #e2fcd9cc;
+
+  --color-textDark-primary: #222325;
+  --color-textDark-secondary: #333333ad;
+  --color-textDark-tertiary: #3a354161;
+
+  --color-textLight-primary: #3a354161;
+  --color-textLight-secondary: #3a354161;
+  --color-textLight-tertiary: #9d9ea1;
+  --color-textLight-quaternary: #3ecf4c;
+
+  --color-default-white: #ffffff;
+  --color-default-black: #000000;
+
+  --color-bg-primary: #fcf8ca;
+  --color-bg-secondary: #ffffff;
+
+  /* Font */
+  --font-poppins: "Poppins", sans-serif;
+  --font-dmsans: "DM Sans", sans-serif;
+}
+
+body {
+  font-family: "DM Sans", sans-serif;
+  background-color: var(--color-bg-primary);
+}
+
+@utility btn-primary {
+  @apply border-0 cursor-pointer bg-main-primary rounded-md text-base font-semibold tracking-wider text-default-white transition duration-300 ease-in-out hover:bg-main-primary/80 hover:text-default-white;
+}
+
+@utility btn-secondary {
+  @apply border-0 cursor-pointer bg-main-secondary rounded-md text-base font-semibold tracking-wider text-default-white transition duration-300 ease-in-out hover:bg-main-secondary/80 hover:text-default-white;
+}
+
+@utility btn-tertiary {
+  @apply border-0 cursor-pointer bg-main-quaternary rounded-md text-base font-semibold tracking-wider text-main-primary transition duration-300 ease-in-out hover:bg-main-quaternary/80 hover:text-main-primary;
+}
+
+@utility btn-quaternary {
+  @apply border cursor-pointer border-main-primary rounded-md text-base font-semibold tracking-wider text-main-primary transition duration-300 ease-in-out hover:bg-main-primary hover:text-default-white;
+}
