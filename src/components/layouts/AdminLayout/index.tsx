@@ -15,7 +15,7 @@ const AdminLayout = ({ title, children }: AuthLayoutProps) => {
       <header className="w-full fixed z-9999 top-0 left-0 bg-[#21222D] shadow-md overflow-x-hidden">
         <AdminNavbar />
       </header>
-      <main className="max-w-screen-3xl min-h-screen 3xl:container p-4 bg-[#171821] overflow-x-hidden">
+      <main className="max-w-screen-3xl min-h-screen 3xl:container p-4 bg-[#171821]">
         {children}
       </main>
     </Fragment>

@@ -4,8 +4,8 @@ import AuthFormInput from "../../../fragment/AuthInput/AuthFormInput";
 import Button from "../../../fragment/Button";
 
 
-
 const AuthLogin = () => {
+
   return (
     <section className="w-full md:w-md m-auto p-3">
       <div className="w-full md:w-md m-auto mt-10 flex flex-col bg-white rounded-md px-6 py-3">

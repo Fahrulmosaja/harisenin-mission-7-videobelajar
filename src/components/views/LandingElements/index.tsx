@@ -5,14 +5,14 @@ import CardAction from '../../fragment/Card/CardAction';
 import { useEffect, useState } from 'react';
 import type { IProduct } from '../AdminElements/ProductManage/Types';
 import { localStorageProduct } from '../../../utils/localStorageProduct';
+import { storeProduct } from '../../../libs/zustand/storeProducts';
 
 const LandingElements = () => {
-  const [products, setProducts] = useState<IProduct[]>([]);
+  const { getProducts } = storeProduct();
 
   useEffect(() => {
-    const storedProducts = localStorageProduct.getStored();
-    setProducts(storedProducts);
-  }, []);
+    getProducts();
+  }, [getProducts]);
 
   return (
     <section className="max-w-[1200px] mx-auto mt-20">
@@ -29,7 +29,7 @@ const LandingElements = () => {
 
         <div className="py-6 w-full">
           <div className="py-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <CardAction product={products[0]} />
+            <CardAction />
           </div>
         </div>
 

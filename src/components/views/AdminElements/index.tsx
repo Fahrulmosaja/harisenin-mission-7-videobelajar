@@ -1,44 +1,54 @@
-import React, { useEffect, useState } from "react";
 import Button from "../../fragment/Button";
 import { RiSearchLine } from "@remixicon/react";
+import TableAdmin from "../../fragment/Table";
+import { useEffect, useState } from "react";
+import { storeProduct } from "../../../libs/zustand/storeProducts";
+import type { IProductsSchema } from "../../../types/ProductsCourseType";
 import ProductModal from "./ProductManage/ProductModal";
-import type { IProduct } from "./ProductManage/Types";
-import { localStorageProduct } from "../../../utils/localStorageProduct";
-import CardAdmin from "../../fragment/Card/CardAdmin";
 
 const AdminElements = () => {
-  const [products, setProducts] = useState<IProduct[]>([]);
-  const [editProduct, setEditProduct] = useState<IProduct | null>(null);
-  const [openModal, setOpenModal] = useState(false);
+
+  const { products, getProducts, deleteProduct } = storeProduct();
+  const [showModal, setShowModal] = useState(false);
+  const [editProduct, setEditProduct] = useState<IProductsSchema | undefined>(undefined);
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    const storedProducts = localStorageProduct.getStored();
-    setProducts(storedProducts);
-  }, []);
-
-  useEffect(() => {
-    if (products.length > 0) {
-      localStorageProduct.setStored(products);
-    }
-  }, [products]);
-
-  const handleCreateProduct = (product: IProduct) => {
-    setProducts([...products, product]);
+  const handleAdd = () => {
+    setEditProduct(undefined);
+    setShowModal(true);
   };
 
-  const handleEditProduct = (product: IProduct) => {
+  const handleEdit = (product: IProductsSchema) => {
+    console.log("Editing product:", product);
     setEditProduct(product);
-    setOpenModal(true);
+    setShowModal(true);
   };
 
-  const handleDeleteProduct = (product: IProduct) => {
-    setProducts(products.filter((p) => p.id !== product.id));
+  const handleDelete = async (product: IProductsSchema) => {
+    console.log("Deleting product:", product);
+    if (confirm("Apakah kamu serius mau menghapus kursus ini?")) {
+      await deleteProduct(product);
+      await getProducts();
+    }
   };
 
-  const filteredProducts = products.filter((p) =>
-    p.title.toLowerCase().includes(search.toLowerCase())
-  );
+  const handleClose = () => {
+    setShowModal(false);
+    setEditProduct(undefined);
+  }
+
+  const handleFilteredProducts = () => {
+    if (search.trim() === "") {
+      return products;
+    }
+    return products.filter((p) =>
+      p.title.toLowerCase().includes(search.toLowerCase())
+    );
+  }
+
+  useEffect(() => {
+    getProducts();
+  }, [getProducts]);
 
   return (
     <section className="max-w-[1200px] mx-auto mt-20">
@@ -51,51 +61,30 @@ const AdminElements = () => {
               className="w-full px-2 py-1 text-sm font-dmsans focus:outline-none"
               placeholder="Search"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                handleFilteredProducts();
+              }}
             />
           </div>
           <Button
             className="text-xs text-white py-3 px-4 rounded-md font-semibold"
             variant="btn-secondary"
             type="button"
-            onClick={() => setOpenModal(true)}
+            onClick={() => { handleAdd() }}
           >
             + Tambah Produk
           </Button>
         </div>
-
-        <div className="mx-auto py-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredProducts.map((product) => (
-            <CardAdmin
-              key={product.id}
-              product={product}
-              onEdit={handleEditProduct}
-              onDelete={handleDeleteProduct}
-            />
-          ))}
-        </div>
-
-        {/* Modal */}
-        {openModal && (
-          <ProductModal
-            product={editProduct}
-            onClose={() => {
-              setOpenModal(false);
-              setEditProduct(null);
-            }}
-            onSave={(product) => {
-              if (editProduct) {
-                setProducts(
-                  products.map((p) => (p.id === product.id ? product : p))
-                );
-              } else {
-                handleCreateProduct(product);
-              }
-              setOpenModal(false);
-              setEditProduct(null);
-            }}
+        <div>
+          <TableAdmin
+            onEdit={handleEdit}
+            onDelete={handleDelete}
           />
-        )}
+          {showModal && (
+            <ProductModal onClose={handleClose} onEdit={editProduct} />
+          )}
+        </div>
       </div>
     </section>
   );
